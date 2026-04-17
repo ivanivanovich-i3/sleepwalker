@@ -13,16 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '4.7.2'
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Restore NuGet packages
+        run: nuget restore Sleepwalker.sln
 
       - name: Build Release
-        run: dotnet build --configuration Release --no-restore
+        run: msbuild Sleepwalker.sln /p:Configuration=Release /p:Platform=AnyCPU
 
       - name: Create ZIP
         run: |
