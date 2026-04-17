@@ -13,18 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-
-      - name: Restore NuGet packages
-        run: nuget restore Sleepwalker.sln
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
 
       - name: Build Release
-        run: msbuild Sleepwalker.sln /p:Configuration=Release /p:Platform=AnyCPU
+        run: dotnet build Sleepwalker.sln -c Release
+
+      - name: Publish
+        run: dotnet publish Sleepwalker.csproj -c Release -o publish
 
       - name: Create ZIP
-        run: |
-          Compress-Archive -Path bin/Release/* -DestinationPath Sleepwalker-Release.zip
+        run: Compress-Archive -Path publish/* -DestinationPath Sleepwalker-Release.zip
         shell: pwsh
 
       - name: Upload artifact
