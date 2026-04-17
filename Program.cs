@@ -7,7 +7,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-class ShutdownBlocker
+class Program
 {
     // перехватываем сигнал завершения
     private const int WM_QUERYENDSESSION = 0x0011;
