@@ -28,8 +28,15 @@ jobs:
         run: Compress-Archive -Path publish/* -DestinationPath Sleepwalker-Release.zip
         shell: pwsh
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Rename ZIP
+        run: Rename-Item -Path Sleepwalker-Release.zip -NewName Sleepwalker-latest.zip
+        shell: pwsh
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: sleepwalker-release
-          path: Sleepwalker-Release.zip
+          files: Sleepwalker-latest.zip
+          tag_name: latest
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
