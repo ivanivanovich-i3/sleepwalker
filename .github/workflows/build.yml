@@ -25,18 +25,20 @@ jobs:
         run: dotnet publish Sleepwalker.csproj -c Release -o publish
 
       - name: Create ZIP
-        run: Compress-Archive -Path publish/* -DestinationPath Sleepwalker-Release.zip
+        run: Compress-Archive -Path publish/* -DestinationPath Sleepwalker-latest.zip
         shell: pwsh
 
-      - name: Rename ZIP
-        run: Rename-Item -Path Sleepwalker-Release.zip -NewName Sleepwalker-latest.zip
-        shell: pwsh
+      - name: Delete Previous Latest Release
+        continue-on-error: true
+        run: gh release delete latest --yes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: Sleepwalker-latest.zip
           tag_name: latest
-          make_latest: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
