@@ -3,7 +3,7 @@ gnu general public license v3.0
 сделано ivi3
 */
 
-uusing System;
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
